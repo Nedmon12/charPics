@@ -4,7 +4,8 @@ import numpy as np
 
 def stringrep(filename):
     image = Image.open(filename)
-
+    # image = image.reduce(3)
+    image = image.resize((600, 200))
     image = image.convert("1")
 
     width, height = image.size
@@ -20,7 +21,7 @@ def stringrep(filename):
             # if image.getpixel((j, i)) >= 200:
             # asciiCanvas[i][j] = "."
             else:
-                string_representation += "."
+                string_representation += "X"
             # J is not possibly unbound moron
             # there's no boundary you don't know that because you have a retarded
             # implementation of arrays python
@@ -60,7 +61,7 @@ def writeTofile(string_representation):
 
 
 def main():
-    print(stringrep("./butterfly.jpg"))
+    print(stringrep("./gooners.jpg"))
 
 
 if __name__ == "__main__":
