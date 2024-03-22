@@ -3,8 +3,38 @@ import numpy as np
 from rembg import remove
 
 
+# grayRamp = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. "
+"""
+grayRamp = [
+    "X",
+    "#",
+    "%",
+    "&",
+    "*",
+    ".",
+    "~",
+    "a",
+    "r",
+    "\\",
+    "[",
+    "]",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+]
+"""
+grayRamp = ["X", "*", " "]
+rampLength = len(grayRamp)
+
+
 def stringrep(image):
-    image = image.resize((600, 400))
+    # image = image.resize((600, 400))
     image = image.convert("1")
 
     width, height = image.size
@@ -13,9 +43,9 @@ def stringrep(image):
     for i in range(int(height)):
         for j in range(int(width)):
             if image.getpixel((j, i)) == 0:
-                string_representation += " "
+                string_representation += "  "
             else:
-                string_representation += "#"
+                string_representation += "X0"
         string_representation += "\n"
 
     return string_representation
@@ -27,10 +57,14 @@ def npstringrep(image):
     width, height = image.shape
     for i in range(int(height)):
         for j in range(int(width)):
-            if image[i][j] < 100:
-                string_representation += " "
-            else:
+            if image[i][j] > 0:
                 string_representation += "X"
+            else:
+                string_representation += " "
+
+            # string_representation += grayRamp[
+            #     int((image[i][j]) * (rampLength - 1)) // 255
+            # ]
         string_representation += "\n"
 
     return string_representation
@@ -76,11 +110,13 @@ def writeTofile(string_representation):
 def main():
     # image = remove_background("./peter.jpg")
     # print(stringrep(image))
-    image = Image.open("./peter.jpg")
-
+    # image = Image.open("./peter.jpg")
+    image = remove_background("./peter.jpg")
     image = image.convert("L")
     npimage = np.array(image)
-    print(npstringrep(reduceImage(npimage, (5, 5))))
+    npimage = reduceImage(npimage, (5, 5))
+    image = Image.fromarray(npimage)
+    print(stringrep(image))
 
 
 if __name__ == "__main__":
